@@ -34,7 +34,6 @@ prompt.get(['username1', 'username2'], function (err, result) {
   let deckOfCards = new Deck();
   deckOfCards.createNewDeck(suits, ranks, rankScores);
 
-
   /* Initialize Player Hands */
 
   //
@@ -50,35 +49,74 @@ prompt.get(['username1', 'username2'], function (err, result) {
   let handOne = deckOfCards.dealCards(deckOfCards.cards.length/13);
   let handTwo = deckOfCards.dealCards(deckOfCards.cards.length/13);
 
+  console.log(handOne);
+
+
   /* Initialize Players with usernames and hands  */
   const playerOne = new Player(result.username1, handOne);
   const playerTwo = new Player(result.username2, handTwo);
 
+  console.log(playerOne.playCard(handOne[0]));
+
   let playedCardA = playerOne.playCard(handOne[0]);
   let playedCardB = playerTwo.playCard(handTwo[0]);
 
-  // let winningCard = (playedCardA.score > playedCardB.score) ? playedCardA : playedCardB;
   let winningCard;
   let winner;
 
-  if ( playedCardA[0].score > playedCardB[0].score ) {
-    winner = playerOne;
-    winningCard = playedCardA;
-    // let winnings = [...winner.hand, playedCardA, playedCardB]
-  } else {
-    winner = playerTwo;
-    winningCard = playedCardB;
+  function playWar() {
 
-    // let winnings = [...winner.hand, cardsFromRound]
-    // let handTwo = [...handTwo, winnings]
+    // WAR DECLARED, SAME CARD SCORE
+    if (playedCardA[0].score === playedCardB[0].score) {
+
+      let playerOneWarCard = playerOne.playCard(handOne[0]);
+      let playerTwoWarCard = playerTwo.playCard(handTwo[0]);
+      let war = true;
+
+      while (war) {
+        if (playerOneWarCard[0].score > playerTwoWarCard[0].score) {
+          playerOne.wonRound(playerTwo);
+          war = false;
+        } else {
+          playerTwo.wonRound(playerOne);
+          war = false;
+        }
+      }
+    }
+
+    // NORMAL GAME PLAY
+    if (playedCardA[0].score > playedCardB[0].score) {
+      playerOne.wonRound(playerTwo);
+    } else {
+      playerTwo.wonRound(playerOne);
+    }
   }
+
+
+  // PLAY WAR
+
+  let noWinner;
+
+  while (noWinner = true) {
+
+    playWar();
+
+    if (playerOne.hand.length === 0) {
+      console.log(`${playerOne.username} won!`)
+      noWinner = false;
+    } else if (playerTwo.hand.length === 0) {
+      console.log(`${playerTwo.username} won!`)
+      noWinner = false;
+    }
+  }
+
 
 
 
   console.log(playerOne.username + ' played: ', playedCardA);
   console.log(playerTwo.username + ' played: ', playedCardB);
 
-  console.log(`The winning card is ${winningCard[0].title} , ${winner.username} wins this round!`);
+  //console.log(`The winning card is ${winningCard[0].title} , ${winner.username} wins this round!`);
 
 
 
