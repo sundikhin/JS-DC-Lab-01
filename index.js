@@ -35,19 +35,8 @@ prompt.get(['username1', 'username2'], function (err, result) {
   deckOfCards.createNewDeck(suits, ranks, rankScores);
 
   /* Initialize Player Hands */
-
-  //
-  //
-  //
-  //
-  // CHANGE THIS TO DIVIDE BY TWO BEFORE TURNING IN
-  //
-  //
-  //
-  //
-
-  let handOne = deckOfCards.dealCards(deckOfCards.cards.length/13);
-  let handTwo = deckOfCards.dealCards(deckOfCards.cards.length/13);
+  let handOne = deckOfCards.dealCards(deckOfCards.cards.length/2);
+  let handTwo = deckOfCards.dealCards(deckOfCards.cards.length/2);
 
   console.log(handOne);
 
